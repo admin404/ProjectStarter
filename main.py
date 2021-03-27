@@ -206,14 +206,11 @@ class django_start_app(QWidget):
         self.setWindowTitle("Start Server")
 
     def ui(self):
-        self.project_name = QLineEdit()
-        self.project_name.setPlaceholderText("Project Name")
-
         self.app_name = QLineEdit()
         self.app_name.setPlaceholderText("App Name")
 
-        self.manage_folder_loc = QLineEdit()
-        self.manage_folder_loc.setPlaceholderText("manage.py folder")
+        self.project_path = QLineEdit()
+        self.project_path.setPlaceholderText("Project Directory")
 
         self.browse = QPushButton()
         self.browse.setText("...")
@@ -223,32 +220,45 @@ class django_start_app(QWidget):
         self.submit.setText("Submit")
         self.submit.clicked.connect(self.submit_handler)
 
+        self.back = QPushButton()
+        self.back.setText("Back")
+        self.back.clicked.connect(self.back_handler)
+
         self.layout = QGridLayout(self)
-        self.layout.addWidget(self.manage_folder_loc, 0, 0, 1, 1)
+        self.layout.addWidget(self.project_path, 0, 0, 1, 1)
         self.layout.addWidget(self.browse, 0, 1, 1, 1)
-        self.layout.addWidget(self.project_name, 1, 0, 1, 0)
         self.layout.addWidget(self.app_name, 2, 0, 1, 0)
         self.layout.addWidget(self.submit, 3, 0, 1, 0)
+        self.layout.addWidget(self.back, 4, 0, 1, 0)
 
     def browse_handler(self):
-        path_link = QFileDialog.getOpenFileName(
-            self, "Open File", "C:\\", "Python Script (manage*.py)"
-        )[0]
-        self.manage_folder_loc.setText(path_link)
+        path_link = QFileDialog.getExistingDirectory(
+            self, "Choose Project Directory", "C:\\"
+        )
+        self.project_path.setText(path_link)
 
     def submit_handler(self):
-        path = self.manage_folder_loc.text()
-        project_name = self.project_name.text()
+        path = self.project_path.text()
         app_name = self.app_name.text()
 
-        contains = "manage.py" in path
-
-        if not contains or path == "" or project_name == "" or app_name == "":
+        if path == "" or app_name == "":
             self.setWindowTitle("ERROR")
             time.sleep(0.5)
             self.setWindowTitle("Start Project")
         else:
-            print(path, "\n", project_name, "\n", app_name)
+            self.django_create_app(path, app_name)
+
+    def django_create_app(self, path, name):
+        print(path)
+        proc = subprocess.Popen(
+            ["start", "cmd", "/k", f"cd {path} && python manage.py startapp {name}"],
+            shell=True,
+        )
+
+    def back_handler(self):
+        self.close()
+        self.django_back = django_action_chose()
+        self.django_back.show()
 
 
 # start server
