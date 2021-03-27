@@ -8,6 +8,8 @@ from PySide6.QtCore import *
 from PySide6.QtWidgets import *
 
 # main function
+
+
 class main(QWidget):
     def __init__(self):
         super().__init__()
@@ -164,16 +166,18 @@ class django_start_project(QWidget):
 
     def start_app(self):
         path = self.path.text()
+        name = self.project_name.text()
+
         if path == "":
             self.setWindowTitle("ERROR")
             time.sleep(0.5)
             self.setWindowTitle("Start Project")
         else:
-            self.create_project()
+            self.create_project(path, name)
 
-    def create_project(self):
-        project_name = self.project_name.text()
-        print(project_name)
+    def create_project(self, path, name):
+        path = os.path.join(path, name)
+        print(path)
 
     def back_handler(self):
         self.close()
