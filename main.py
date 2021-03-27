@@ -97,9 +97,9 @@ class django_action_chose(QWidget):
         action_id = self.action.currentIndex()
         if action_id == 0:
             path = os.getcwd()
-            resources = os.path.join(path, "django.txt")
+            txt = os.path.join(path, "django.txt")
             proc = subprocess.Popen(
-                ["start", "cmd", "/c", f"python -m pip install -r {resources}"],
+                ["start", "cmd", "/c", f"python -m pip install -r {txt}"],
                 shell=True,
             )
             proc.wait()
@@ -159,9 +159,7 @@ class django_start_project(QWidget):
         self.layout.addWidget(self.back, 3, 0, 1, 0)
 
     def set_path(self):
-        path_link = QFileDialog.getExistingDirectory(
-            self, "Set project directory", "C:\\"
-        )
+        path_link = QFileDialog.getExistingDirectory(self, "Choose Directory", "C:\\")
         self.path.setText(path_link)
 
     def start_app(self):
@@ -176,8 +174,11 @@ class django_start_project(QWidget):
             self.create_project(path, name)
 
     def create_project(self, path, name):
-        path = os.path.join(path, name)
-        print(path)
+        path_converted = path.replace("/", "\\")
+        project_path = os.path.join(path_converted, name)
+        proc = subprocess.Popen(
+            ["start", "cmd", "/k", f"mkdir {project_path}"], shell=1
+        )
 
     def back_handler(self):
         self.close()
