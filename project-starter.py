@@ -1,11 +1,12 @@
 import os
 import sys
 import time
+import platform
 import subprocess
 
-from PySide6.QtGui import *
-from PySide6.QtCore import *
-from PySide6.QtWidgets import *
+from PySide2.QtGui import *
+from PySide2.QtCore import *
+from PySide2.QtWidgets import *
 
 # main function
 
@@ -19,7 +20,7 @@ class main(QWidget):
 
     # ui
     def set_ui(self):
-        types = ["Django", "PySide"]
+        types = ["Django", "PySide", "PyQt6"]
 
         self.project_type = QComboBox()
         for projectType in types:
@@ -96,30 +97,57 @@ class django_action_chose(QWidget):
     # submit
     def submit_handler(self):
         action_id = self.action.currentIndex()
-        if action_id == 0:
-            path = os.getcwd()
-            txt = os.path.join(path, "django.txt")
-            proc = subprocess.Popen(
-                ["start", "cmd", "/c", f"python -m pip install -r {txt}"],
-                shell=True,
-            )
-            proc.wait()
-        if action_id == 1:
-            self.close()
-            self.django_start_project = django_start_project()
-            self.django_start_project.show()
-        if action_id == 2:
-            self.close()
-            self.django_start_app = django_start_app()
-            self.django_start_app.show()
-        if action_id == 3:
-            self.close()
-            self.django_start_server = django_start_server()
-            self.django_start_server.show()
-        if action_id == 4:
-            self.close()
-            self.django_make_migrations = django_make_migrations()
-            self.django_make_migrations.show()
+        if platform.system() == "Windows":
+            if action_id == 0:
+                path = os.getcwd()
+                txt = os.path.join(path, "\\requirements\\django.txt")
+                proc = subprocess.Popen(
+                    ["start", "cmd", "/c", f"python -m pip install -r {txt}"],
+                    shell=True,
+                )
+                proc.wait()
+            if action_id == 1:
+                self.close()
+                self.django_start_project = django_start_project()
+                self.django_start_project.show()
+            if action_id == 2:
+                self.close()
+                self.django_start_app = django_start_app()
+                self.django_start_app.show()
+            if action_id == 3:
+                self.close()
+                self.django_start_server = django_start_server()
+                self.django_start_server.show()
+            if action_id == 4:
+                self.close()
+                self.django_make_migrations = django_make_migrations()
+                self.django_make_migrations.show()
+        if platform.system() == "Linux" or platform.system == "Darwin":
+            if action_id == 0:
+                path = os.getcwd()
+                requirements_folder = os.path.join(path, "requirements")
+                txt = os.path.join(requirements_folder, "django.txt")
+                proc = subprocess.Popen(
+                    [f"pip3 install -r {txt}"],
+                    shell=True,
+                )
+                proc.wait()
+            if action_id == 1:
+                self.close()
+                self.django_start_project = django_start_project()
+                self.django_start_project.show()
+            if action_id == 2:
+                self.close()
+                self.django_start_app = django_start_app()
+                self.django_start_app.show()
+            if action_id == 3:
+                self.close()
+                self.django_start_server = django_start_server()
+                self.django_start_server.show()
+            if action_id == 4:
+                self.close()
+                self.django_make_migrations = django_make_migrations()
+                self.django_make_migrations.show()
 
     # back
     def back_action(self):
@@ -388,30 +416,171 @@ class pyside_action_choose(QWidget):
         actions = [
             "Install PySide2",
             "Install PySide6",
-            "Start PySide2 app",
-            "Start PySide6 app",
+            "Create PySide2 app",
+            "Create PySide6 app",
+            "Start Pyside2 app",
+            "Start Pyside6 app",
         ]
 
         self.action = QComboBox()
         for action in actions:
             self.action.addItem(action)
 
-        self.submit_action = QPushButton()
-        self.submit_action.setText("Submit")
+        self.submit = QPushButton()
+        self.submit.setText("Submit")
+        self.submit.clicked.connect(self.submit_handler)
 
         self.back = QPushButton()
         self.back.setText("Back")
-        self.back.clicked.connect(self.back_action)
+        self.back.clicked.connect(self.back_handler)
 
         self.layout = QGridLayout(self)
         self.layout.addWidget(self.action)
-        self.layout.addWidget(self.submit_action)
+        self.layout.addWidget(self.submit)
         self.layout.addWidget(self.back)
 
-    def back_action(self):
+    def submit_handler(self):
+        action_id = self.action.currentIndex()
+        system = platform.system()
+        if system == "Windows":
+            # install pyside2
+            if action_id == 0:
+                path = os.getcwd()
+                txt = os.path.join(path, "\\requirements\\pyside2.txt")
+                proc = subprocess.Popen(
+                    ["start", "cmd", "/c", f"python -m pip install -r {txt}"],
+                    shell=True,
+                )
+                proc.wait()
+            # install pyside 6
+            if action_id == 1:
+                path = os.getcwd()
+                txt = os.path.join(path, "\\requirements\\pyside6.txt")
+                proc = subprocess.Popen(
+                    ["start", "cmd", "/c", f"python -m pip install -r {txt}"],
+                    shell=True,
+                )
+                proc.wait()
+            # create pyside2 app
+            if action_id == 2:
+                self.close()
+                self.wps2pc = windows_pyside2_project_creation()
+                self.wps2pc.show()
+            # create pyside6 app
+            if action_id == 3:
+                self.close()
+                self.wps6pc = windows_pyside2_project_creation()
+                self.wps6pc.show()
+            # start pyside2 app
+            if action_id == 4:
+                self.close()
+                self.wps2ps = windows_pyside2_project_start()
+                self.wps2ps.show()
+            # start pyside6 app
+            if action_id == 5:
+                self.close()
+                self.wps6ps = windows_pyside6_project_start()
+                self.wps6ps.show()
+        if system == "Linux" or system == "Darwin":
+            action_id = self.action.currentIndex()
+            system = platform.system()
+            # install pyside2
+            if action_id == 0:
+                path = os.getcwd()
+                requirements_folder = os.path.join(path, "requirements")
+                txt = os.path.join(requirements_folder, "pyside2.txt")
+                proc = subprocess.Popen(
+                    [f"pip3 install -r {txt}"],
+                    shell=True,
+                )
+                proc.wait()
+            # install pyside 6
+            if action_id == 1:
+                path = os.getcwd()
+                requirements_folder = os.path.join(path, "requirements")
+                txt = os.path.join(requirements_folder, "pyside6.txt")
+                proc = subprocess.Popen(
+                    [f"pip3 install -r {txt}"],
+                    shell=True,
+                )
+                proc.wait()
+                # create pyside2 app
+            if action_id == 2:
+                self.close()
+                self.ups2pc = unix_pyside2_project_creation()
+                self.ups2pc.show()
+            # create pyside6 app
+            if action_id == 3:
+                self.close()
+                self.ups6pc = unix_pyside2_project_creation()
+                self.ups6pc.show()
+            # start pyside2 app
+            if action_id == 4:
+                self.close()
+                self.ups2ps = unix_pyside2_project_start()
+                self.ups2ps.show()
+            # start pyside6 app
+            if action_id == 5:
+                self.close()
+                self.ps6ps = unix_pyside6_project_start()
+                self.ups6ps.show()
+
+    def back_handler(self):
         self.close()
         self.main_ui = main()
         self.main_ui.show()
+
+
+class windows_pyside2_project_creation(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.pyside2_project_creation_ui()
+        self.resize(250, 100)
+        self.setWindowTitle("Choose action")
+
+    def pyside2_project_creation_ui(self):
+        self.submit = QPushButton()
+        self.submit.setText("Submit")
+        self.submit.clicked.connect(self.submit_handler)
+
+        self.layout = QGridLayout(self)
+        self.layout.addWidget(self.submit)
+
+    def submit_handler(self):
+        print("Hello")
+
+
+class windows_pyside6_project_creation(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.pyside6_project_creation_ui()
+        self.resize(250, 100)
+        self.setWindowTitle("Choose action")
+
+    def pyside6_project_creation_ui(self):
+        pass
+
+
+class windows_pyside2_project_start(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.pyside2_project_start_ui()
+        self.resize(250, 100)
+        self.setWindowTitle("Choose action")
+
+    def pyside2_project_start_ui(self):
+        pass
+
+
+class windows_pyside6_project_start(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.pyside6_project_start_ui()
+        self.resize(250, 100)
+        self.setWindowTitle("Choose action")
+
+    def pyside6_project_start_ui(self):
+        pass
 
 
 if __name__ == "__main__":
