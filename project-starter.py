@@ -464,22 +464,22 @@ class pyside_action_choose(QWidget):
             # create pyside2 app
             if action_id == 2:
                 self.close()
-                self.wps2pc = windows_pyside2_project_creation()
+                self.wps2pc = pyside2_project_creation()
                 self.wps2pc.show()
             # create pyside6 app
             if action_id == 3:
                 self.close()
-                self.wps6pc = windows_pyside2_project_creation()
+                self.wps6pc = pyside6_project_creation()
                 self.wps6pc.show()
             # start pyside2 app
             if action_id == 4:
                 self.close()
-                self.wps2ps = windows_pyside2_project_start()
+                self.wps2ps = pyside2_project_start()
                 self.wps2ps.show()
             # start pyside6 app
             if action_id == 5:
                 self.close()
-                self.wps6ps = windows_pyside6_project_start()
+                self.wps6ps = pyside6_project_start()
                 self.wps6ps.show()
         if system == "Linux" or system == "Darwin":
             action_id = self.action.currentIndex()
@@ -507,22 +507,22 @@ class pyside_action_choose(QWidget):
                 # create pyside2 app
             if action_id == 2:
                 self.close()
-                self.ups2pc = unix_pyside2_project_creation()
+                self.ups2pc = pyside2_project_creation()
                 self.ups2pc.show()
             # create pyside6 app
             if action_id == 3:
                 self.close()
-                self.ups6pc = unix_pyside2_project_creation()
+                self.ups6pc = pyside6_project_creation()
                 self.ups6pc.show()
             # start pyside2 app
             if action_id == 4:
                 self.close()
-                self.ups2ps = unix_pyside2_project_start()
+                self.ups2ps = pyside2_project_start()
                 self.ups2ps.show()
             # start pyside6 app
             if action_id == 5:
                 self.close()
-                self.ps6ps = unix_pyside6_project_start()
+                self.ps6ps = _pyside6_project_start()
                 self.ups6ps.show()
 
     def back_handler(self):
@@ -531,7 +531,7 @@ class pyside_action_choose(QWidget):
         self.main_ui.show()
 
 
-class windows_pyside2_project_creation(QWidget):
+class pyside2_project_creation(QWidget):
     def __init__(self):
         super().__init__()
         self.pyside2_project_creation_ui()
@@ -550,7 +550,7 @@ class windows_pyside2_project_creation(QWidget):
         print("Hello")
 
 
-class windows_pyside6_project_creation(QWidget):
+class pyside6_project_creation(QWidget):
     def __init__(self):
         super().__init__()
         self.pyside6_project_creation_ui()
@@ -558,10 +558,18 @@ class windows_pyside6_project_creation(QWidget):
         self.setWindowTitle("Choose action")
 
     def pyside6_project_creation_ui(self):
-        pass
+        self.submit = QPushButton()
+        self.submit.setText("Submit")
+        self.submit.clicked.connect(self.submit_handler)
+
+        self.layout = QGridLayout(self)
+        self.layout.addWidget(self.submit)
+
+    def submit_handler(self):
+        print("Hello")
 
 
-class windows_pyside2_project_start(QWidget):
+class pyside2_project_start(QWidget):
     def __init__(self):
         super().__init__()
         self.pyside2_project_start_ui()
@@ -569,10 +577,18 @@ class windows_pyside2_project_start(QWidget):
         self.setWindowTitle("Choose action")
 
     def pyside2_project_start_ui(self):
-        pass
+        self.submit = QPushButton()
+        self.submit.setText("Submit")
+        self.submit.clicked.connect(self.submit_handler)
+
+        self.layout = QGridLayout(self)
+        self.layout.addWidget(self.submit)
+
+    def submit_handler(self):
+        print("Hello")
 
 
-class windows_pyside6_project_start(QWidget):
+class pyside6_project_start(QWidget):
     def __init__(self):
         super().__init__()
         self.pyside6_project_start_ui()
@@ -580,7 +596,15 @@ class windows_pyside6_project_start(QWidget):
         self.setWindowTitle("Choose action")
 
     def pyside6_project_start_ui(self):
-        pass
+        self.submit = QPushButton()
+        self.submit.setText("Submit")
+        self.submit.clicked.connect(self.submit_handler)
+
+        self.layout = QGridLayout(self)
+        self.layout.addWidget(self.submit)
+
+    def submit_handler(self, os):
+        print("Hello")
 
 
 if __name__ == "__main__":
